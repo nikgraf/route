@@ -23,6 +23,7 @@ typedef void EventHandler(Event e);
 class Router {
   final Map<UrlPattern, Handler> _handlers;
   final bool useFragment;
+  String currentPath;
 
   /**
    * [useFragment] determines whether this Router uses pure paths with
@@ -59,7 +60,9 @@ class Router {
     if (url != null) {
       // always give handlers a non-fragment path
       var fixedPath = url.reverse(url.parse(path));
-      _handlers[url](fixedPath);      
+      if (fixedPath != currentPath) {
+        _handlers[url](fixedPath);
+      }
     } else {
       _logger.info("Unhandled path: $path");
     }
